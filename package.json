@@ -1,0 +1,21 @@
+{
+  "name": "luncheon",
+  "version": "1.0.0",
+  "main": "",
+  "repository": "https://github.com/matveikinner/luncheon.git",
+  "author": "Matvei Kinner <matvei.kinner@gmail.com>",
+  "license": "MIT",
+  "packageManager": "yarn@3.4.1",
+  "devDependencies": {
+    "@commitlint/cli": "^17.4.4",
+    "commitlint-config-jira": "^1.6.4",
+    "commitlint-plugin-jira-rules": "^1.6.4",
+    "husky": "^8.0.0",
+    "pinst": "^3.0.0"
+  },
+  "scripts": {
+    "postinstall": "husky install",
+    "prepack": "pinst --disable",
+    "postpack": "pinst --enable"
+  }
+}

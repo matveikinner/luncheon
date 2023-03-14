@@ -1,0 +1,24 @@
+# Custom variables
+variables:
+  supertokens:
+    version: "2.18"
+    apiKey: "Dh5RBOvnoqzGXcVEZe8OeyXcyR91JrYg0IRNQJ9mKqKC7nrCdynQ2FxNiGY8eQa5nfmPpHI3H2ZHwmZhRv2pi5YtbLtaoJtIvnl1Nmc0YnCpz8BVRnQZMcZCeCm0Wt1w"
+
+spring:
+  main:
+    web-application-type: servlet
+  datasource:
+    platform: postgres
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database: POSTGRESQL
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
