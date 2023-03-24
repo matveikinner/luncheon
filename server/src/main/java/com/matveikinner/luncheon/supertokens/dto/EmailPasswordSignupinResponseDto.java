@@ -2,5 +2,7 @@ package com.matveikinner.luncheon.supertokens.dto;
 
 import com.matveikinner.luncheon.supertokens.models.User;
 
-public record EmailPasswordSignupinResponseDto(String status, User user) {
+import java.util.Optional;
+
+public record EmailPasswordSignupinResponseDto(String status, Optional<User> user) {
 }

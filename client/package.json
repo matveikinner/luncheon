@@ -1,0 +1,45 @@
+{
+  "name": "luncheon-client",
+  "version": "1.0.0",
+  "scripts": {
+    "vite:start": "vite --config configs/vite/vite.development.ts",
+    "vite:build": "vite build --config configs/vite/vite.development.ts",
+    "vite:serve": "vite preview --config configs/vite/vite.development.ts",
+    "webpack:start": "webpack serve --config configs/webpack/webpack.development.ts",
+    "webpack:build": "webpack --config configs/webpack/webpack.production.ts"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.9.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.3",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/plugin-proposal-decorators": "^7.21.0",
+    "@babel/plugin-transform-runtime": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.21.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@types/compression-webpack-plugin": "^9.1.1",
+    "@types/dotenv-webpack": "^7.0.3",
+    "@types/react-dom": "^18.0.11",
+    "@vitejs/plugin-react": "^3.1.0",
+    "babel-loader": "^9.1.2",
+    "css-loader": "^6.7.3",
+    "dotenv-webpack": "^8.0.1",
+    "html-webpack-plugin": "^5.5.0",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
+    "rome": "^11.0.0",
+    "style-loader": "^3.3.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.2",
+    "vite": "^4.2.1",
+    "webpack": "^5.76.3",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.13.1"
+  }
+}

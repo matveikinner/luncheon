@@ -6,6 +6,10 @@
   "author": "Matvei Kinner <matvei.kinner@gmail.com>",
   "license": "MIT",
   "packageManager": "yarn@3.4.1",
+  "workspaces": [
+    "client"
+  ],
+  "private": true,
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",
     "commitlint-config-jira": "^1.6.4",
