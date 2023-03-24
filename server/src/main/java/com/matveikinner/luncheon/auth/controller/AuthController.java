@@ -5,32 +5,34 @@ import com.matveikinner.luncheon.auth.service.AuthService;
 import com.matveikinner.luncheon.supertokens.dto.EmailPasswordSignupinResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping(value = "/api/v1/auth", produces = "application/json")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
-@Slf4j
+@RequestMapping(value = "/api/auth", produces = "application/json")
 @RequiredArgsConstructor
+@Slf4j
 public class AuthController {
-
-    @Autowired
-    private Environment env;
 
     private final AuthService authService;
 
-    @GetMapping("/test")
-    public String test() {
-        log.info("Testing environmental variables {}", env.getProperty("variables.supertokens.version"));
+    // -----------------------------------------------------------------------------------------------------------------
+    //
+    // Auth Controller
+    // Version 1
+    //
+    // -----------------------------------------------------------------------------------------------------------------
 
-        return "Hello";
-    }
+    @PostMapping(path = "/signup", consumes = "application/json", produces = "application/json", headers = "X-API-Version=1")
+    public Mono<ResponseEntity<EmailPasswordSignupinResponseDto>> signup(@RequestBody EmailPasswordDto req) {
+        return this.authService.emailPasswordSignup(req.email(), req.password()).map(result -> {
+            if (result.status().equals("EMAIL_ALREADY_EXISTS_ERROR")) {
+                return new ResponseEntity<>(result, HttpStatus.CONFLICT);
+            }
 
-    @PostMapping("/signup")
-    public Mono<EmailPasswordSignupinResponseDto> signup(@RequestBody EmailPasswordDto req) {
-        return this.authService.emailPasswordSignup(req.email(), req.password());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        });
     }
 }

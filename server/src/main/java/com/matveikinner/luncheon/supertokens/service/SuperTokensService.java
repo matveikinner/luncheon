@@ -1,33 +1,22 @@
 package com.matveikinner.luncheon.supertokens.service;
 
-import com.matveikinner.luncheon.supertokens.dto.EmailPasswordSignupinResponseDto;
+import com.matveikinner.luncheon.supertokens.config.SuperTokensConfig;
 import com.matveikinner.luncheon.supertokens.dto.EmailPasswordSignupinRequestDto;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import com.matveikinner.luncheon.supertokens.dto.EmailPasswordSignupinResponseDto;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class SuperTokensService {
 
-    @Autowired
-    private final Environment env;
+    private final SuperTokensConfig superTokensConfig;
 
-    private final WebClient webClient;
-
-    public SuperTokensService(Environment env, WebClient.Builder webClientBuilder) {
-        this.env = env;
-        this.webClient = webClientBuilder
-                .defaultHeaders(httpHeaders -> {
-                    httpHeaders.add("cdi-version", this.env.getProperty("variables.supertokens.version"));
-                    httpHeaders.add("api-key", this.env.getProperty("variables.supertokens.apiKey"));
-                })
-                .baseUrl("http://localhost:3567")
-                .build();
-    }
 
     // See https://app.swaggerhub.com/apis/supertokens/CDI/2.18.2#/EmailPassword%20Recipe/emailPasswordSignup
     public Mono<EmailPasswordSignupinResponseDto> emailPasswordSignup(String email, String password) {
@@ -35,7 +24,9 @@ public class SuperTokensService {
                 email, password
         );
 
-        return this.webClient
+        // TODO: Handle error(s) with ex. .doOnError(). Kill SuperTokens container to try out.
+        return this.superTokensConfig
+                .webClient()
                 .post()
                 .uri("/recipe/signup")
                 .contentType(MediaType.APPLICATION_JSON)
