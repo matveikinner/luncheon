@@ -2,16 +2,18 @@ package com.matveikinner.luncheon.auth.config;
 
 
 import com.matveikinner.luncheon.auth.filter.JwtAuthenticationFilter;
+import com.matveikinner.luncheon.supertokens.service.SuperTokensService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -24,11 +26,16 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@Slf4j
 public class SecurityConfiguration {
+
+    // private final SuperTokensAuthenticationProvider superTokensAuthenticationProvider;
+
+    private final SuperTokensService superTokensService;
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Value("${some.key:http://localhost:3000}")
+    @Value("${some.key:http://localhost:8080}")
     private List<String> corsOrigins;
 
     private static final String[] OPEN_ENDPOINTS = {
@@ -41,8 +48,7 @@ public class SecurityConfiguration {
         http
                 // by default uses a Bean by the name of corsConfigurationSource
                 // See https://docs.spring.io/spring-security/reference/servlet/integrations/cors.html
-                //.cors(withDefaults())
-                .cors(AbstractHttpConfigurer::disable)
+                .cors(withDefaults())
                 // See See https://docs.spring.io/spring-security/reference/servlet/exploits/csrf.html
                 .csrf(config -> {
                     // See https://docs.spring.io/spring-security/reference/servlet/exploits/csrf.html#servlet-csrf-configure-request-handler
@@ -58,7 +64,7 @@ public class SecurityConfiguration {
                 })
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                // .authenticationProvider(authenticationProvider)
+                // .authenticationProvider(superTokensAuthenticationProvider)
                 // .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         ;
 
@@ -79,5 +85,10 @@ public class SecurityConfiguration {
         source.registerCorsConfiguration("/api/**", configuration);
 
         return source;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }

@@ -4,12 +4,13 @@ import com.matveikinner.luncheon.auth.entity.AuthProvider;
 import com.matveikinner.luncheon.auth.entity.User;
 import com.matveikinner.luncheon.auth.model.AuthProviderType;
 import com.matveikinner.luncheon.auth.repository.UserRepository;
-import com.matveikinner.luncheon.supertokens.dto.EmailPasswordSignupinResponseDto;
+import com.matveikinner.luncheon.supertokens.dto.CreateSessionResponseDto;
+import com.matveikinner.luncheon.supertokens.dto.EmailPasswordSignUpOrInResponseDto;
+import com.matveikinner.luncheon.supertokens.models.UserDataInJWT;
 import com.matveikinner.luncheon.supertokens.service.SuperTokensService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
@@ -20,25 +21,40 @@ public class AuthService {
 
     private final UserRepository userRepository;
 
-    public Mono<EmailPasswordSignupinResponseDto> emailPasswordSignup(String email, String password) {
-        return this.superTokensService.emailPasswordSignup(email, password).doOnSuccess(result -> {
-            // SuperTokens returns on email conflicts HTTP status 200, and body with single property "status" which has
-            // description of the error. Therefore, if user is missing, there was an error. Otherwise, all good.
-            result.user().ifPresent((value) -> {
-                AuthProvider authProvider = new AuthProvider();
+    public EmailPasswordSignUpOrInResponseDto emailPasswordSignUp(String email, String password) {
+        EmailPasswordSignUpOrInResponseDto response = this.superTokensService.emailPasswordSignUp(email, password);
+        log.info("[AuthService] emailPasswordSignUp response: {}", response);
 
-                authProvider.setProviderUserId(value.id());
-                authProvider.setProvider(AuthProviderType.SUPERTOKENS);
+        response.user().ifPresent((value) -> {
+            AuthProvider authProvider = new AuthProvider();
 
-                User user = new User();
+            authProvider.setProviderUserId(value.id());
+            authProvider.setProvider(AuthProviderType.SUPERTOKENS);
 
-                user.setEmail(value.email());
-                user.getAuthProviders().add(authProvider);
+            User user = new User();
 
-                authProvider.setUser(user);
+            user.setEmail(value.email());
+            user.getAuthProviders().add(authProvider);
 
-                this.userRepository.save(user);
-            });
+            authProvider.setUser(user);
+
+            this.userRepository.save(user);
         });
+
+        return response;
+    }
+
+    public EmailPasswordSignUpOrInResponseDto emailPasswordSignIn(String email, String password) {
+        EmailPasswordSignUpOrInResponseDto response = this.superTokensService.emailPasswordSignIn(email, password);
+        log.info("[AuthService] emailPasswordSignIn response: {}", response);
+
+        return response;
+    }
+
+    public CreateSessionResponseDto<UserDataInJWT> createSession(String userId) {
+        CreateSessionResponseDto<UserDataInJWT> response = this.superTokensService.createSession(userId);
+        log.info("[AuthService] createSession response: {}", response);
+
+        return response;
     }
 }

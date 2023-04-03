@@ -1,4 +1,6 @@
 import { createRoot } from "react-dom/client";
+import "reflect-metadata";
+import "./index.css";
 import CoreModule from "./core/presentation/CoreModule";
 import CoreProvider from "@core/presentation/CoreProvider";
 

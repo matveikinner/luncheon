@@ -1,0 +1,24 @@
+{
+	"text": {
+		"form": {
+			"fields": {
+				"email": {
+					"label": "Email"
+				},
+				"password": {
+					"label": "Password"
+				}
+			},
+			"validation": {
+				"email": {
+					"validate": "Email is invalid",
+					"required": "Email is required"
+				},
+				"password": {
+					"validate": "Password is invalid",
+					"required": "Password is required"
+				}
+			}
+		}
+	}
+}

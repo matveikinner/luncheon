@@ -4,5 +4,5 @@ import com.matveikinner.luncheon.supertokens.models.User;
 
 import java.util.Optional;
 
-public record EmailPasswordSignupinResponseDto(String status, Optional<User> user) {
+public record EmailPasswordSignUpOrInResponseDto(String status, Optional<User> user) {
 }

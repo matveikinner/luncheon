@@ -1,0 +1,24 @@
+{
+	"text": {
+		"form": {
+			"fields": {
+				"email": {
+					"label": "Sähköposti"
+				},
+				"password": {
+					"label": "Salasana"
+				}
+			},
+			"validation": {
+				"email": {
+					"validate": "Sähköposti on virheellinen",
+					"required": "Sähköposti on pakollinen"
+				},
+				"password": {
+					"validate": "Salasana on virheellinen",
+					"required": "Salasana on pakollinen"
+				}
+			}
+		}
+	}
+}

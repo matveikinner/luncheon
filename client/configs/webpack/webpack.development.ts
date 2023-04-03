@@ -2,6 +2,7 @@ import path from "path";
 import { Configuration as WebpackConfiguration } from "webpack";
 import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";
 import HtmlWebpackPlugin from "html-webpack-plugin";
+import DotenvWebpackPlugin from "dotenv-webpack";
 
 const rootPath = path.resolve(__dirname, "..", "..");
 const rootDir = path.resolve(rootPath, "modules");
@@ -45,9 +46,11 @@ const webpackConfig = (): WebpackConfiguration => ({
       },
       {
         test: /\.css$/i,
+        include: rootPath,
         use: [
           { loader: "style-loader" },
-          { loader: "css-loader", options: { url: false } },
+          { loader: "css-loader", options: { url: false, importLoaders: 1 } },
+          { loader: "postcss-loader" },
         ],
       },
     ],
@@ -55,6 +58,9 @@ const webpackConfig = (): WebpackConfiguration => ({
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(rootPath, "public", "index.html"),
+    }),
+    new DotenvWebpackPlugin({
+      path: path.resolve(rootPath, "configs", "environments", ".env.local"),
     }),
   ],
   devServer,
